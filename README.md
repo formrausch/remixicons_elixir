@@ -1,21 +1,20 @@
-# Heroicons
+[![logo](https://raw.githubusercontent.com/Remix-Design/RemixIcon/master/.github/files/logo-github.svg)](https://remixicon.com)
 
-[Heroicons](https://heroicons.com) are "a set of free MIT-licensed high-quality SVG icons for you to use in your web projects". This package gives you Elixir functions to drop Heroicons into your HTML, styled with arbitrary classes.
+This library provides optimized svgs for each Remix Icon packaged as a Phoenix Component.
 
-This library provides optimized svgs for each Heroicon packaged as a Phoenix Component.
+Remix Icons are open-source neutral-style system symbols elaborately crafted for designers and developers.
+All of the icons are free for both personal and commercial use.
 
-Heroicons are designed by [Steve Schoger](https://twitter.com/steveschoger)
-
-Current Heroicons Version: **2.1.5**.
+Current Remix Icon Version: **4.6.0**.
 
 ## Installation
 
-Add Heroicons to your `mix.exs`:
+Add Remix Icon to your `mix.exs`:
 
 ```elixir
 defp deps do
   [
-    {:heroicons, "~> 0.5.5"}
+    {:remixicon, "~> 0.1.1"}
   ]
 end
 ```
@@ -24,23 +23,34 @@ After that, run `mix deps.get`.
 
 ## Usage
 
-The components are provided by the `Heroicons` module. Each icon is a Phoenix Component you can use in your HEEx templates.
+The components are provided by the `Remixicon` module. Each icon is a Phoenix Component you can use in your HEEx templates.
 
-By default, the icon components will use the outline style, but the `solid`,
-`mini` or `micro` attributes may be passed to select styling, for example:
+By default, the lined component is used, but the `fill`
+attribute may be passed to select styling, for example:
 
 ```eex
-<Heroicons.cake />
-<Heroicons.cake solid />
-<Heroicons.cake mini />
-<Heroicons.cake micro />
+<Remixicon.github />
+<Remixicon.github line />
+<Remixicon.github fill />
 ```
 
 You can also pass arbitrary HTML attributes to the components, such as classes:
 
 ```eex
-<Heroicons.cake class="w-2 h-2" />
-<Heroicons.cake solid class="w-2 h-2 text-gray-500" />
+<Remixicon.github class="w-4 h-4" />
+<Remixicon.github fill class="w-4 h-4" />
 ```
 
-For a full list of icons see [the docs](https://hexdocs.pm/heroicons/api-reference.html) or [heroicons.com](https://heroicons.com/).
+For a full list of icons see [remixicon.com](https://remixicon.com/).
+
+## License
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at [http://www.apache.org/licenses/LICENSE-2.0](http://www.apache.org/licenses/LICENSE-2.0)
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
