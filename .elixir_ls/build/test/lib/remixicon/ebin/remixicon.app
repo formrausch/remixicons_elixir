@@ -1,0 +1,10 @@
+{application,remixicon,
+             [{modules,['Elixir.Mix.Tasks.Remixicon.Build',
+                        'Elixir.Mix.Tasks.Remixicon.Update',
+                        'Elixir.Remixicon']},
+              {optional_applications,[]},
+              {applications,[kernel,stdlib,elixir,logger,inets,ssl,
+                             phoenix_live_view,castore]},
+              {description,"Phoenix components for Remix Icon"},
+              {registered,[]},
+              {vsn,"0.1.1"}]}.

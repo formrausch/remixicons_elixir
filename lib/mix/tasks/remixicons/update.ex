@@ -6,16 +6,12 @@ defmodule Mix.Tasks.Remixicon.Update do
   @vsn "4.6.0"
   @tmp_dir_name "remixicon-elixir"
   @url "https://github.com/Remix-Design/RemixIcon/releases/download/v#{@vsn}/RemixIcon_Svg_v#{@vsn}.zip"
-  @styles ["fill", "line"]
-
   # Updates the icons in the assets/icons directory
 
   use Mix.Task
   require Logger
 
   def vsn, do: @vsn
-
-  def styles, do: @styles
 
   def svgs_path, do: Path.join("assets", "icons")
 
@@ -37,35 +33,32 @@ defmodule Mix.Tasks.Remixicon.Update do
     # category directories
     src_root_dir = Path.join([tmp_dir, "icons"])
 
-    # Copy icon styles (line and fill) to assets/icons folder
-    Enum.each(@styles, fn style ->
-      dest_dir = Path.join(svgs_path(), style)
+    # Copy icons to assets/icons folder
+    dest_dir = svgs_path()
 
-      File.rm_rf!(dest_dir)
-      File.mkdir_p!(dest_dir)
+    File.rm_rf!(dest_dir)
+    File.mkdir_p!(dest_dir)
 
-      src_root_dir
-      |> File.ls!()
-      |> Enum.reverse()
-      |> Enum.each(fn category ->
-        copy_svg_files(Path.join([src_root_dir, category]), dest_dir, style)
-      end)
+    src_root_dir
+    |> File.ls!()
+    |> Enum.reverse()
+    |> Enum.each(fn category ->
+      copy_svg_files(Path.join([src_root_dir, category]), dest_dir)
     end)
   end
 
   @svg_start ~s(<svg viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">)
   @svg_end ~s(</svg>)
 
-  defp copy_svg_files(src_dir, dest_dir, style) do
+  defp copy_svg_files(src_dir, dest_dir) do
     src_dir
     |> File.ls!()
     |> Enum.reverse()
     |> Enum.each(fn file ->
-      pattern = "-#{style}.svg"
       src_path = Path.join([src_dir, file])
-      dest_path = Path.join([dest_dir, String.replace(file, pattern, ".svg")])
+      dest_path = Path.join([dest_dir, file])
 
-      if String.ends_with?(file, "-#{style}.svg") do
+      if String.ends_with?(file, ".svg") do
         content =
           src_path
           |> File.read!()

@@ -12,19 +12,19 @@ defmodule Mix.Tasks.Remixicon.Build do
   def run(_args) do
     vsn = UpdateTask.vsn()
     svgs_path = UpdateTask.svgs_path()
-    line = Path.wildcard(Path.join(svgs_path, "line/**/*.svg"))
-    fill = Path.wildcard(Path.join(svgs_path, "fill/**/*.svg"))
-    ordered_icons = line ++ fill
+    icons_files = Path.wildcard(Path.join(svgs_path, "**/*.svg"))
 
     icons =
-      Enum.group_by(ordered_icons, &function_name(&1), fn file ->
+      Enum.group_by(icons_files, &function_name(&1), fn file ->
         for path <- file |> File.read!() |> String.split("\n"),
             path = String.trim(path),
             String.starts_with?(path, "<path"),
             do: path
       end)
 
-    assigns = %{icons: icons, vsn: vsn}
+    ordered_icons = icons |> Enum.sort()
+
+    assigns = %{icons: ordered_icons, vsn: vsn}
 
     Mix.Generator.copy_template(@template_file, @target_file, assigns, force: true)
     Mix.Task.run("format")

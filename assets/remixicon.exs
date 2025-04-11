@@ -8,19 +8,18 @@ defmodule Remixicon do
 
   Remix icons come in two styles – fill and line.
 
-  By default, the icon components will use the line style, but the `fill`
-  attribute may be passed to select styling, for example:
+  The icon components include the style as a suffix to the function name:
 
   ```heex
-  <Remixicon.github />
-  <Remixicon.github fill />
+  <Remixicon.github_line />
+  <Remixicon.github_fill />
   ```
 
   You can also pass arbitrary HTML attributes to the components:
 
   ```heex
-  <Remixicon.github class="w-2 h-2" />
-  <Remixicon.github fill class="w-2 h-2" />
+  <Remixicon.github_line class="w-2 h-2" />
+  <Remixicon.github_fill class="w-2 h-2" />
   ```
 
   ## Remix Icon License Attribution
@@ -42,19 +41,12 @@ defmodule Remixicon do
   use Phoenix.Component
 
   defp svg(assigns) do
-    case assigns do
-      %{line: false, fill: false} ->
-        ~H"<.svg_base {@rest}><%%= {:safe, @paths[:line]} %></.svg_base>"
-      %{line: true, fill: false} ->
-        ~H"<.svg_base {@rest}><%%= {:safe, @paths[:line]} %></.svg_base>"
-      %{line: false, fill: true} ->
-        ~H"<.svg_base {@rest}><%%= {:safe, @paths[:fill]} %></.svg_base>"
-      %{} -> raise ArgumentError, "expected either line or fill, but got both."
-    end
+    ~H"<.svg_base {@rest}><%%= {:safe, @path} %></.svg_base>"
   end
 
   attr :rest, :global, default: %{viewBox: "0 0 24 24", fill: "currentColor", "aria-hidden": "true"}
   slot :inner_block, required: true
+
   defp svg_base(assigns) do
     ~H"""
     <svg xmlns="http://www.w3.org/2000/svg" {@rest}>
@@ -64,14 +56,11 @@ defmodule Remixicon do
   end
 
   <%= for icon <- @icons,
-      {name, [line, fill]} = icon,
+      {name, path} = icon,
       func = Mix.Tasks.Remixicon.Build.normalize_function_name(name) do %>
 
     @doc """
     Renders the `<%= name %>` icon.
-
-    By default, the lined component is used, but the `fill`
-    attribute can be provided for alternative styles.
 
     You may also pass arbitrary HTML attributes to be applied to the svg tag.
 
@@ -80,16 +69,12 @@ defmodule Remixicon do
     ```heex
     <Remixicon.<%= func %> />
     <Remixicon.<%= func %> class="w-4 h-4" />
-    <Remixicon.<%= func %> line />
-    <Remixicon.<%= func %> fill />
     ```
     """
     attr :rest, :global, doc: "The arbitrary HTML attributes for the svg container", include: ~w(fill stroke stroke-width)
-    attr :line, :boolean, default: false
-    attr :fill, :boolean, default: false
 
     def <%= func %>(assigns) do
-      svg(assign(assigns, paths: %{line: ~S|<%= line %>|, fill: ~S|<%= fill %>|}))
+      svg(assign(assigns, path: ~S|<%= path %>|))
     end
   <% end %>
 end

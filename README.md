@@ -24,21 +24,18 @@ After that, run `mix deps.get`.
 ## Usage
 
 The components are provided by the `Remixicon` module. Each icon is a Phoenix Component you can use in your HEEx templates.
-
-By default, the lined component is used, but the `fill`
-attribute may be passed to select styling, for example:
+For example:
 
 ```eex
-<Remixicon.github />
-<Remixicon.github line />
-<Remixicon.github fill />
+<Remixicon.github_line />
+<Remixicon.github_fill />
 ```
 
 You can also pass arbitrary HTML attributes to the components, such as classes:
 
 ```eex
-<Remixicon.github class="w-4 h-4" />
-<Remixicon.github fill class="w-4 h-4" />
+<Remixicon.github_line class="w-4 h-4" />
+<Remixicon.github_fill class="w-4 h-4" />
 ```
 
 For a full list of icons see [remixicon.com](https://remixicon.com/).
