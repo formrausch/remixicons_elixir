@@ -44,7 +44,7 @@ defmodule Remixicon do
     ~H"<.svg_base {@rest}><%%= {:safe, @path} %></.svg_base>"
   end
 
-  attr :rest, :global, default: %{viewBox: "0 0 24 24", fill: "currentColor", "aria-hidden": "true"}
+  attr :rest, :global, default: %{ fill: "currentColor", "aria-hidden": "true", viewBox: "0 0 24 24"}
   slot :inner_block, required: true
 
   defp svg_base(assigns) do
@@ -52,6 +52,42 @@ defmodule Remixicon do
     <svg xmlns="http://www.w3.org/2000/svg" {@rest}>
       <%%= render_slot(@inner_block) %>
     </svg>
+    """
+  end
+
+  defp call_icon_function(icon_name, assigns) do
+    try do
+      function_name =
+        icon_name
+        |> Mix.Tasks.Remixicon.Build.normalize_function_name()
+        |> String.to_atom()
+
+      apply(__MODULE__, function_name, [assigns])
+    rescue
+      _e in BadFunctionError ->
+        raise ArgumentError, "The icon `#{icon_name}` does not exist."
+    end
+  end
+
+  @doc """
+  Renders an icon by its name.
+
+  You may also pass arbitrary HTML attributes to be applied to the svg tag.
+
+  ## Examples
+
+  ```heex
+  <Remixicon.icon name="github-line" />
+  <Remixicon.icon name="github-fill" %> class="w-4 h-4" />
+  ```
+  """
+
+  attr :name, :string, required: true, doc: "The name of the icon including the desired style as suffix (e.g. `-line` or `-fill`)."
+  attr :rest, :global, doc: "The arbitrary HTML attributes for the svg container", include: ~w(fill stroke stroke-width)
+
+  def icon(assigns) do
+    ~H"""
+    <%%= call_icon_function(@name, assigns |> Map.delete(:name)) %>
     """
   end
 
